@@ -6,9 +6,14 @@
   <title>Wave</title>
 </head>
 <body>
-  <liquid-fill-gauge width="200" height="200" min="0" max="100" value="3" amplitude="5"></liquid-fill-gauge>
+  <liquid-fill-gauge id="lfg-1" width="200" height="200" min="0" max="100" value="1" amplitude="2"></liquid-fill-gauge>
   <liquid-fill-gauge width="100" height="100" value="50" amplitude="12"></liquid-fill-gauge>
-  <liquid-fill-gauge width="50" height="50" frequency="0.1" value="1" amplitude="10" style="--liguid-fill-font-color: red; --liguid-fill-font-size: 1rem;"></liquid-fill-gauge>
+  <liquid-fill-gauge width="50" height="50" frequency="0.1" value="1" amplitude="10" style="--liguid-fill-text-color: red; --liguid-fill-text-size: 1rem;"></liquid-fill-gauge>
+  <liquid-fill-gauge width="50" height="50" frequency="0.9" value="1" amplitude="6" style="--liguid-fill-color: red; --liguid-fill-text-color: red; --liguid-fill-text-size: 1rem;"></liquid-fill-gauge>
   <script type="module" src="/main.ts"></script>
+  <script>
+    const lfg1 = document.getElementById('lfg-1')
+    lfg1.addEventListener('change', (e) => console.log(e))
+  </script>
 </body>
 </html>
