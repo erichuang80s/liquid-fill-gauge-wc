@@ -1,4 +1,4 @@
-import { LitElement, css, html } from 'lit'
+import { LitElement, css, html, render } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { generateSineWave } from './utils/sineWave'
 import clamp from './utils/clamp'
@@ -10,19 +10,15 @@ import { scale } from './utils/scale'
 export class WaveSvg extends LitElement {
   static styles = css`
     :host {
+      color: #38bdf8;
+      box-sizing: border-box;      
       font-size: 1rem;
       overflow-clip-margin: context-box;
       --liguid-fill-color: #38bdf8;
-      --liguid-fill-font-size: 2rem;    
-      --liguid-fill-font-color: black;    
-      --liguid-fill-overlay-font-color: white;    
-    }
-
-    :host {
-      color: #38bdf8;
-      border: solid 1px black;
-      display: inline-flex;
-      box-sizing: border-box;
+      --liguid-fill-bg-color: white;
+      --liguid-fill-text-size: 2rem;    
+      --liguid-fill-text-color: black;    
+      --liguid-fill-overlay-text-color: white;    
     }
 
     :host .liguid-fill {
@@ -30,79 +26,63 @@ export class WaveSvg extends LitElement {
     }
 
     :host .liguid-fill-text {
-      font-size: var(--liguid-fill-font-size);
+      font-size: var(--liguid-fill-text-size);
       font-family: sans-serif;
       font-weight: bold;
-    }
-    :host .liguid-fill-text.overlay {
+      transform: translate(0 50%);
     }
   `
+
+  @property({ type: Number, reflect: true  }) width?: number = 256
+  @property({ type: Number, reflect: true  }) height?: number = 256
+  @property({ type: Number, reflect: true  }) amplitude: number = 12
+  @property({ type: Number, reflect: true  }) frequency: number = 0.02
+  @property({ type: Number, reflect: true  }) phaseShift: number = 1
+  @property({ type: Number, reflect: true  }) min: number = 0
+  @property({ type: Number, reflect: true  }) max: number = 100
+
+  private _value: number = 0
+  @property({type: Number, reflect: true})
+  set value(v) {
+    this._value = Number(v)
+    if(this._isFirstRender) {
+      this._setupYTween()
+      this._setupValueTween()
+      this.dispatchEvent(new Event('change', {composed: true}))
+    }
+  }
+
+  get value () {
+    return this._value
+  }
+
+  @state() private _isFirstRender: boolean = false
+  @state() private _translateX: number
+  @state() private _translateY: number
+  @state() private _beforeY: number = 0
+  @state() private _stateValue: number = 0
+  @state() private _beforeValue: number = 0
+  @state() private _insideWidth: number = 10
+
   private _animate: AnimateRetrun | void
   private _tweenX: TweenReturn | void
   private _tweenY: TweenReturn | void
   private _tweenValue: TweenReturn | void
   private _scaleValue: (num: number) => number
-  private _slotCount: number
-
-  @property({ type: Number })
-  width?: number = 256
-
-  @property({ type: Number })
-  height?: number = 256
-
-  @property({ type: Number })
-  amplitude: number = 12
-
-  @property({ type: Number })
-  frequency: number = 0.02
-
-  @property({ type: Number })
-  phaseShift: number = 1
-
-  @property({ type: Number })
-  value: number = 10
-
-  @property({ type: Number })
-  min: number = 0
-
-  @property({ type: Number })
-  max: number = 100
-
-  @state()
-  private _translateX: number
-
-  @state()
-  private _translateY: number
-
-  @state()
-  private _beforeY: number = 0
-
-  @state()
-  private _value: number = 0
-
-  @state()
-  private _beforeValue: number = 0
-
-  @state()
   // 週期
   private _period = 2 * Math.PI / this.frequency
 
   get fullValue() {
-    return this.height - this.amplitude
+    return this.height - this.amplitude - this._insideWidth
   }
 
-  constructor() {
-    super()
-    this._slotCount = this.childElementCount
-  }
 
   connectedCallback(): void {
     super.connectedCallback()
 
     this._setupScale()
-
-    this._translateY = this.fullValue
     this._beforeY = this.fullValue
+    this._translateY = this.fullValue
     this._translateX = 0
 
     this._setupXTween()
@@ -121,9 +101,7 @@ export class WaveSvg extends LitElement {
         }
 
         if (this._tweenY) {
-          let y = this._tweenY(() => {
-            this.dispatchEvent(new CustomEvent('liguid-fill-updated'))
-          })
+          let y = this._tweenY()
 
           if (!y)
             y = this._beforeY
@@ -135,11 +113,12 @@ export class WaveSvg extends LitElement {
           let v = this._tweenValue()
           if (!v)
             v = this._beforeValue
-          this._value = Math.ceil(v)
+          this._stateValue = Math.ceil(v)
         }
       },
     })
     this._animate.play()
+    this._isFirstRender = true
   }
 
   private _setupScale() {
@@ -154,9 +133,10 @@ export class WaveSvg extends LitElement {
     })
   }
 
-  private _setupYTween() {
+  private _setupYTween() {   
     const clampValue = clamp(this.value, this.min, this.max)
     const to = this._scaleValue(clampValue)
+    
     this._tweenY = tween({
       from: this._beforeY,
       to: this._scaleValue(clampValue),
@@ -176,12 +156,6 @@ export class WaveSvg extends LitElement {
     this._beforeValue = clampValue
   }
 
-  setValue(val: number) {
-    this.value = val
-    this._setupYTween()
-    this._setupValueTween()
-  }
-
   resize(w: number, h: number) {
     this.width = w
     this.height = h
@@ -192,11 +166,12 @@ export class WaveSvg extends LitElement {
   }
 
   render() {
-    const { width, height, amplitude, phaseShift, frequency, _translateX, _translateY, _period } = this
+    const { width, height, amplitude, phaseShift, frequency, _translateX, _translateY, _period, _insideWidth } = this
     const halfWidth = width / 2
     const halfHeight = height / 2
 
     const d = generateSineWave({ width: width + _period, height, phaseShift, amplitude, frequency })
+    
 
     return html`
       <svg 
@@ -211,12 +186,12 @@ export class WaveSvg extends LitElement {
         </defs>
         <g transform="translate(${halfWidth}, ${halfHeight})">
           <g class="liguid-fill">
-            <circle r="${halfWidth}" fill="none" stroke="var(--liguid-fill-color)" stroke-width="3"></circle>
-            <circle cx="0" cy="0" r="${halfWidth - 4}" clip-path="url(#clipPathWave)" ></circle>
+            <circle r="${halfWidth - 4}" fill="var(--liguid-fill-bg-color)" stroke="var(--liguid-fill-color)" stroke-width="4"></circle>
+            <circle cx="0" cy="0" r="${halfWidth - _insideWidth}" clip-path="url(#clipPathWave)" ></circle>
           </g>
-          <g>
-            <text stroke="none" class="liguid-fill-text" text-anchor="middle" fill="var(--liguid-fill-font-color)" dy="${halfHeight * 0.1}">${this._value}</text>
-            <text stroke="none" class="liguid-fill-text" text-anchor="middle" fill="var(--liguid-fill-overlay-font-color)" dy="${halfHeight * 0.1}" clip-path="url(#clipPathWave)">${this._value}</text>
+          <g class="liguid-fill-text">
+            <text stroke="none" text-anchor="middle" fill="var(--liguid-fill-text-color)" dy="0">${this._stateValue}</text>
+            <text stroke="none" text-anchor="middle" fill="var(--liguid-fill-overlay-text-color)" dy="0" clip-path="url(#clipPathWave)">${this._stateValue}</text>
           </g>
         </g>
       </svg>

@@ -8,11 +8,11 @@
 export function linear(t: number, b: number, c: number, d: number): number {
   return (c * t) / d + b
 }
-export function easeIn(t: number, b: number, c: number, d: number): number {
-  return c * (t /= d) * t * t + b
-}
-export function easeOut(t: number, b: number, c: number, d: number): number {
-  return c * ((t = t / d - 1) * t * t + 1) + b
-}
+// export function easeIn(t: number, b: number, c: number, d: number): number {
+//   return c * (t /= d) * t * t + b
+// }
+// export function easeOut(t: number, b: number, c: number, d: number): number {
+//   return c * ((t = t / d - 1) * t * t + 1) + b
+// }
 
-export type easingType = 'linear' | 'easeIn' | 'easeOut'
+export type easingType = 'linear'
