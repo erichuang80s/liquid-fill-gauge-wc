@@ -8,7 +8,7 @@ export default defineConfig({
     minify: 'terser',
     emptyOutDir: true,
     lib: {
-      entry: path.resolve(__dirname, './src/index.ts'),
+      entry: path.resolve(__dirname, './src/liguidFillGauge.ts'),
       name: 'liquidFillGauge',
       fileName(moudleFormat) {
         return moudleFormat === 'umd' ? `liquidFillGauge.${moudleFormat}.min.js` : 'liquidFillGauge.min.js'
