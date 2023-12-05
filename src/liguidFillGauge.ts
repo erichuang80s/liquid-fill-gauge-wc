@@ -1,4 +1,4 @@
-import { LitElement, css, svg , render } from 'lit'
+import { LitElement, css, svg } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { generateSineWave } from './utils/sineWave'
 import clamp from './utils/clamp'
@@ -19,6 +19,7 @@ export class WaveSvg extends LitElement {
       --liguid-fill-text-size: 2rem;    
       --liguid-fill-text-color: black;    
       --liguid-fill-overlay-text-color: white;    
+      --liguid-fill-unit-text-size: .85rem;    
     }
 
     :host .liguid-fill {
@@ -40,6 +41,7 @@ export class WaveSvg extends LitElement {
   @property({ type: Number, reflect: true  }) phaseShift: number = 1
   @property({ type: Number, reflect: true  }) min: number = 0
   @property({ type: Number, reflect: true  }) max: number = 100
+  @property({ type: String, reflect: true  }) unit: string = ''
 
   private _value: number = 0
   @property({type: Number, reflect: true})
@@ -76,10 +78,9 @@ export class WaveSvg extends LitElement {
     return this.height - this.amplitude - this._insideWidth
   }
 
-
   connectedCallback(): void {
     super.connectedCallback()
-
+    
     this._setupScale()
     this._beforeY = this.fullValue
     this._translateY = this.fullValue
@@ -166,7 +167,7 @@ export class WaveSvg extends LitElement {
   }
 
   render() {
-    const { width, height, amplitude, phaseShift, frequency, _translateX, _translateY, _period, _insideWidth } = this
+    const { width, height, amplitude, phaseShift, frequency, _translateX, _translateY, _period, _insideWidth, unit } = this
     const halfWidth = width / 2
     const halfHeight = height / 2
 
@@ -176,7 +177,11 @@ export class WaveSvg extends LitElement {
       <circle r="${halfWidth - 4}" fill="var(--liguid-fill-bg-color)" stroke="var(--liguid-fill-color)" stroke-width="4"></circle>
       <circle cx="0" cy="0" r="${halfWidth - _insideWidth}" clip-path="url(#clipPathWave)" ></circle>
     `
-    
+    const translateCenter = `translate(${-halfWidth} ${-halfHeight})`
+    const isSlot = this.childElementCount !== 0
+    const unitTspan = svg/* svg */`
+      <tspan font-size="var(--liguid-fill-unit-text-size)">${unit}</tspan>
+    `
     return svg/* svg */`
       <svg 
         width="${width}"
@@ -184,17 +189,24 @@ export class WaveSvg extends LitElement {
         viewBox="0 0 ${width} ${height}"
       >
         <defs>
-          <clipPath id="clipPathWave" transform="translate(${-halfWidth} ${-halfHeight})">
+          <clipPath id="clipPathWave" transform="${translateCenter}">
             <path d="${d}" transform="translate(${_translateX} ${_translateY})"></path>
           </clipPath>
         </defs>
         <g transform="translate(${halfWidth}, ${halfHeight})">
           <g class="liguid-fill">
-            ${defaultCircle}
-          </g>
+            <slot></slot>
+            ${!isSlot && defaultCircle}
+          </g>      
           <g class="liguid-fill-text">
-            <text stroke="none" text-anchor="middle" fill="var(--liguid-fill-text-color)" dy="0">${this._stateValue}</text>
-            <text stroke="none" text-anchor="middle" fill="var(--liguid-fill-overlay-text-color)" dy="0" clip-path="url(#clipPathWave)">${this._stateValue}</text>
+            <text stroke="none" text-anchor="middle" fill="var(--liguid-fill-text-color)" dy="0">
+              ${this._stateValue}
+              ${unitTspan}
+            </text>
+            <text stroke="none" text-anchor="middle" fill="var(--liguid-fill-overlay-text-color)" dy="0" clip-path="url(#clipPathWave)">
+              ${this._stateValue}
+              ${unitTspan}
+            </text>
           </g>
         </g>
       </svg>
