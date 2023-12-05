@@ -172,7 +172,7 @@ export class WaveSvg extends LitElement {
 
     const d = generateSineWave({ width: width + _period, height, phaseShift, amplitude, frequency })
     
-    const defaultCircle = svg `
+    const defaultCircle = svg/* svg */`
       <circle r="${halfWidth - 4}" fill="var(--liguid-fill-bg-color)" stroke="var(--liguid-fill-color)" stroke-width="4"></circle>
       <circle cx="0" cy="0" r="${halfWidth - _insideWidth}" clip-path="url(#clipPathWave)" ></circle>
     `
