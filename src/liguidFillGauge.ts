@@ -7,7 +7,7 @@ import { type AnimateRetrun, animate } from './utils/animate'
 import { scale } from './utils/scale'
 
 @customElement('liquid-fill-gauge')
-export class WaveSvg extends LitElement {
+export class LiquidFillGauge extends LitElement {
   static styles = css`
     :host {
       color: #38bdf8;
