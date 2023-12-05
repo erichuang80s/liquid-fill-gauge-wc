@@ -10,6 +10,7 @@ import { scale } from './utils/scale'
 export class LiquidFillGauge extends LitElement {
   static styles = css`
     :host {
+      display: inline-flex;
       color: #38bdf8;
       box-sizing: border-box;      
       font-size: 1rem;
@@ -34,27 +35,27 @@ export class LiquidFillGauge extends LitElement {
     }
   `
 
-  @property({ type: Number, reflect: true  }) width?: number = 256
-  @property({ type: Number, reflect: true  }) height?: number = 256
-  @property({ type: Number, reflect: true  }) amplitude: number = 12
-  @property({ type: Number, reflect: true  }) frequency: number = 0.02
-  @property({ type: Number, reflect: true  }) phaseShift: number = 1
-  @property({ type: Number, reflect: true  }) min: number = 0
-  @property({ type: Number, reflect: true  }) max: number = 100
-  @property({ type: String, reflect: true  }) unit: string = ''
+  @property({ type: Number, reflect: true }) width?: number = 256
+  @property({ type: Number, reflect: true }) height?: number = 256
+  @property({ type: Number, reflect: true }) amplitude: number = 12
+  @property({ type: Number, reflect: true }) frequency: number = 0.02
+  @property({ type: Number, reflect: true }) phaseShift: number = 1
+  @property({ type: Number, reflect: true }) min: number = 0
+  @property({ type: Number, reflect: true }) max: number = 100
+  @property({ type: String, reflect: true }) unit: string = ''
 
   private _value: number = 0
-  @property({type: Number, reflect: true})
+  @property({ type: Number, reflect: true })
   set value(v) {
     this._value = Number(v)
-    if(this._isFirstRender) {
+    if (this._isFirstRender) {
       this._setupYTween()
       this._setupValueTween()
-      this.dispatchEvent(new Event('change', {composed: true}))
+      this.dispatchEvent(new Event('change', { composed: true }))
     }
   }
 
-  get value () {
+  get value() {
     return this._value
   }
 
@@ -80,7 +81,7 @@ export class LiquidFillGauge extends LitElement {
 
   connectedCallback(): void {
     super.connectedCallback()
-    
+
     this._setupScale()
     this._beforeY = this.fullValue
     this._translateY = this.fullValue
@@ -134,10 +135,10 @@ export class LiquidFillGauge extends LitElement {
     })
   }
 
-  private _setupYTween() {   
+  private _setupYTween() {
     const clampValue = clamp(this.value, this.min, this.max)
     const to = this._scaleValue(clampValue)
-    
+
     this._tweenY = tween({
       from: this._beforeY,
       to: this._scaleValue(clampValue),
@@ -172,7 +173,7 @@ export class LiquidFillGauge extends LitElement {
     const halfHeight = height / 2
 
     const d = generateSineWave({ width: width + _period, height, phaseShift, amplitude, frequency })
-    
+
     const defaultCircle = svg/* svg */`
       <circle r="${halfWidth - 4}" fill="var(--liguid-fill-bg-color)" stroke="var(--liguid-fill-color)" stroke-width="4"></circle>
       <circle cx="0" cy="0" r="${halfWidth - _insideWidth}" clip-path="url(#clipPathWave)" ></circle>
