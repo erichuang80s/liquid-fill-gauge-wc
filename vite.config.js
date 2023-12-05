@@ -11,9 +11,9 @@ export default defineConfig({
       entry: path.resolve(__dirname, './src/liguidFillGauge.ts'),
       name: 'liquidFillGauge',
       fileName(moudleFormat) {
-        return moudleFormat === 'umd' ? `liquidFillGauge.${moudleFormat}.min.js` : 'liquidFillGauge.min.js'
+        return moudleFormat === 'es' ? `liquidFillGauge.${moudleFormat}.min.js` : 'liquidFillGauge.min.js'
       },
-      formats: ['umd', 'iife'],
+      formats: ['es', 'iife'],
     },
   },
   resolve: {
