@@ -1,4 +1,4 @@
-import { LitElement, css, html, render } from 'lit'
+import { LitElement, css, svg , render } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { generateSineWave } from './utils/sineWave'
 import clamp from './utils/clamp'
@@ -172,8 +172,12 @@ export class WaveSvg extends LitElement {
 
     const d = generateSineWave({ width: width + _period, height, phaseShift, amplitude, frequency })
     
-
-    return html`
+    const defaultCircle = svg `
+      <circle r="${halfWidth - 4}" fill="var(--liguid-fill-bg-color)" stroke="var(--liguid-fill-color)" stroke-width="4"></circle>
+      <circle cx="0" cy="0" r="${halfWidth - _insideWidth}" clip-path="url(#clipPathWave)" ></circle>
+    `
+    
+    return svg/* svg */`
       <svg 
         width="${width}"
         height="${height}"
@@ -186,8 +190,7 @@ export class WaveSvg extends LitElement {
         </defs>
         <g transform="translate(${halfWidth}, ${halfHeight})">
           <g class="liguid-fill">
-            <circle r="${halfWidth - 4}" fill="var(--liguid-fill-bg-color)" stroke="var(--liguid-fill-color)" stroke-width="4"></circle>
-            <circle cx="0" cy="0" r="${halfWidth - _insideWidth}" clip-path="url(#clipPathWave)" ></circle>
+            ${defaultCircle}
           </g>
           <g class="liguid-fill-text">
             <text stroke="none" text-anchor="middle" fill="var(--liguid-fill-text-color)" dy="0">${this._stateValue}</text>
