@@ -31,7 +31,13 @@ export class LiquidFillGauge extends LitElement {
       font-size: var(--liguid-fill-text-size);
       font-family: sans-serif;
       font-weight: bold;
-      transform: translate(0 50%);
+      transform: translate(50%, 50%);
+    }
+
+    ::slotted(*),
+    :host foreignObject {
+      width: 100%;
+      height: 100%;
     }
   `
 
@@ -171,12 +177,12 @@ export class LiquidFillGauge extends LitElement {
     const { width, height, amplitude, phaseShift, frequency, _translateX, _translateY, _period, _insideWidth, unit } = this
     const halfWidth = width / 2
     const halfHeight = height / 2
-
+    const halfInsideWidth = _insideWidth / 2
     const d = generateSineWave({ width: width + _period, height, phaseShift, amplitude, frequency })
 
     const defaultCircle = svg/* svg */`
-      <circle r="${halfWidth - 4}" fill="var(--liguid-fill-bg-color)" stroke="var(--liguid-fill-color)" stroke-width="4"></circle>
-      <circle cx="0" cy="0" r="${halfWidth - _insideWidth}" clip-path="url(#clipPathWave)" ></circle>
+      <circle cx="${halfWidth}" cy="${halfHeight}" r="${halfWidth - 4}" fill="var(--liguid-fill-bg-color)" stroke="var(--liguid-fill-color)" stroke-width="4"></circle>
+      <circle cx="${halfWidth}" cy="${halfHeight}" r="${halfWidth - _insideWidth}" clip-path="url(#clipPathWave)" ></circle>
     `
     const translateCenter = `translate(${-halfWidth} ${-halfHeight})`
     const isSlot = this.childElementCount !== 0
@@ -190,25 +196,28 @@ export class LiquidFillGauge extends LitElement {
         viewBox="0 0 ${width} ${height}"
       >
         <defs>
-          <clipPath id="clipPathWave" transform="${translateCenter}">
+          <clipPath id="clipPathWave">
             <path d="${d}" transform="translate(${_translateX} ${_translateY})"></path>
           </clipPath>
         </defs>
-        <g transform="translate(${halfWidth}, ${halfHeight})">
-          <g class="liguid-fill">
-            <slot></slot>
-            ${!isSlot && defaultCircle}
-          </g>      
-          <g class="liguid-fill-text">
-            <text stroke="none" text-anchor="middle" fill="var(--liguid-fill-text-color)" dy="0">
-              ${this._stateValue}
-              ${unitTspan}
-            </text>
-            <text stroke="none" text-anchor="middle" fill="var(--liguid-fill-overlay-text-color)" dy="0" clip-path="url(#clipPathWave)">
-              ${this._stateValue}
-              ${unitTspan}
-            </text>
-          </g>
+        <g class="liguid-fill">
+          <foreignObject>
+            <slot name="outward"></slot>
+          </foreignObject>
+          <foreignObject clip-path="url(#clipPathWave)">
+            <slot name="liguid"></slot>
+          </foreignObject>
+        </g>  
+        <g class="liguid-fill">${!isSlot && defaultCircle}</g>
+        <g class="liguid-fill-text" transform="${translateCenter}">
+          <text stroke="none" text-anchor="middle" fill="var(--liguid-fill-text-color)" dy="0">
+            ${this._stateValue}
+            ${unitTspan}
+          </text>
+          <text stroke="none" text-anchor="middle" fill="var(--liguid-fill-overlay-text-color)" dy="0" clip-path="url(#clipPathWave)">
+            ${this._stateValue}
+            ${unitTspan}
+          </text>
         </g>
       </svg>
     `
