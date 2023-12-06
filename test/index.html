@@ -6,7 +6,23 @@
   <title>Wave</title>
 </head>
 <body>
-  <liquid-fill-gauge id="lfg-1" width="200" height="200" min="0" max="100" value="1" amplitude="2"></liquid-fill-gauge>
+  <liquid-fill-gauge id="lfg-1" width="200" height="200" min="0" max="100" value="25" amplitude="2">
+    <svg slot="liguid" transform="scale(0.9)">
+      <rect width="100%" height="100%" rx="20"></rect>
+    </svg>
+    <svg slot="outward">
+      <rect
+        width="196"
+        height="196"
+        transform="translate(2 2)"
+        fill="var(--liguid-fill-bg-color)" 
+        stroke="#B0B4BA" 
+        stroke-width="4"
+        rx="20"
+      >
+      </rect>
+    </svg>
+  </liquid-fill-gauge>
   <liquid-fill-gauge width="100" height="100" value="50" amplitude="12"></liquid-fill-gauge>
   <liquid-fill-gauge width="50" height="50" frequency="0.1" value="1" amplitude="10" style="--liguid-fill-text-color: red; --liguid-fill-text-size: 1rem;"></liquid-fill-gauge>
   <liquid-fill-gauge width="50" height="50" frequency="0.9" value="1" amplitude="6" style="--liguid-fill-color: red; --liguid-fill-text-color: red; --liguid-fill-text-size: 1rem;"></liquid-fill-gauge>
