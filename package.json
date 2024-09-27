@@ -5,6 +5,10 @@
   "description": "liquid fill gauge",
   "author": "erichuang80s@gmail.com",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erichuang80s/liquid-fill-gauge-wc.git"
+  },
   "keywords": [],
   "main": "./dist/liquidFillGauge.min.js",
   "module": "./dist/liquidFillGauge.es.min.js",
