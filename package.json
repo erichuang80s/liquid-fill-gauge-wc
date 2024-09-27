@@ -6,9 +6,9 @@
   "author": "",
   "license": "ISC",
   "keywords": [],
-  "types": "./src/types.d.ts",
   "main": "./dist/liquidFillGauge.min.js",
   "module": "./dist/liquidFillGauge.es.min.js",
+  "types": "./src/types.d.ts",
   "scripts": {
     "dev": "vite",
     "build": "vite build"
