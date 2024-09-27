@@ -16,9 +16,4 @@ export default defineConfig({
       formats: ['es', 'iife'],
     },
   },
-  resolve: {
-    alias: {
-      wavejs: path.resolve(__dirname, './src/index.ts'),
-    },
-  },
 })

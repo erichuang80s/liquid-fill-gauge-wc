@@ -1,1 +1,1 @@
-export * from 'wavejs'
+export * from '../src/liguidFillGauge.ts'

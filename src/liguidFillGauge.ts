@@ -195,18 +195,18 @@ export class LiquidFillGauge extends LitElement {
     const isSlot = this.childElementCount !== 0
     const content = !isSlot
       ? svg/* svg */`
-      <g class="liguid-fill offsetCenter">    
+      <g class="liguid-fill offsetCenter" part="liguid-wrap">    
         <circle cx="0" cy="0" r="${halfWidth - 4}" fill="var(--liguid-fill-bg-color)" stroke="var(--liguid-fill-color)" stroke-width="4"></circle>
         <circle cx="0" cy="0" r="${halfWidth - _insideWidth}" clip-path="url(#clipPathWave)"></circle>
       </g>
     `
       : svg/* svg */`
-      <g class="liguid-fill">
+      <g class="liguid-fill" part="liguid-wrap">
         <foreignObject>
           <slot name="outward"></slot>
         </foreignObject>
         <foreignObject clip-path="url(#clipPathWave2)">
-          <slot name="liguid"></slot>
+          <slot name="inward"></slot>
         </foreignObject>
       </g>
     `
@@ -236,7 +236,7 @@ export class LiquidFillGauge extends LitElement {
           ${clipPathWave2}
         </defs>
         ${content}
-        <g class="liguid-fill-text">
+        <g class="liguid-fill-text" part="text-wrap">
           <text stroke="none" text-anchor="middle" fill="var(--liguid-fill-text-color)" dy="0">
             ${this._stateValue}
             ${unitTspan}
