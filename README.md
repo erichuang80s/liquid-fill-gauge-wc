@@ -8,13 +8,13 @@
 Node 環境
 
 ```bash
-  npm i liquid-fill-gauge 
+  npm i liquid-fill-gauge
 ```
 
 瀏覽器
 
 ```html
-  <script src="https://cdn.jsdelivr.net/gh/erichuang80s/liquid-fill-gauge-wc@master/dist/liquidFillGauge.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/liquid-fill-gauge@latest/dist/liquidFillGauge.min.js"></script>
 ```
 
 ## Examples
@@ -24,10 +24,10 @@ Node 環境
   <liquid-fill-gauge
     width="200"
     height="200"
-    min="0" 
-    max="100" 
+    min="0"
+    max="100"
     value="55"
-    amplitude="2"  
+    amplitude="2"
   ></liquid-fill-gauge>
 
 ```
