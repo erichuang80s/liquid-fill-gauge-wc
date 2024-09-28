@@ -1,6 +1,6 @@
 # liquid-fill-gauge-wc
 
-使用 [Lit](https://lit.dev/) 建構的 web component 的水位儀表
+使用 [Lit](https://lit.dev/) 建構 web component 的水位儀表
 參考 [D3 Liquid Fill Gauge](https://gist.github.com/brattonc/5e5ce9beee483220e2f6)
 
 ## Installation
@@ -55,12 +55,17 @@ Node 環境
 | outward | 自訂外框容器形狀                  |
 | inward  | 自訂液體形狀，會被 clip-path 遮罩 |
 
-## Part
+## CSS Variable
 
-| Name        | Description               |
-| ----------- | ------------------------- |
-| liguid-wrap | liguid element parent     |
-| text-wrap   | value text element parent |
+```css
+  /* Default */
+  --liguid-fill-color: #38bdf8;
+  --liguid-fill-bg-color: white;
+  --liguid-fill-text-size: 2rem;
+  --liguid-fill-text-color: black;
+  --liguid-fill-overlay-text-color: white;
+  --liguid-fill-unit-text-size: .85rem;
+```
 
 ## Event
 
