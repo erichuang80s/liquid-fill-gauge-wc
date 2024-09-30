@@ -8,7 +8,7 @@
 Node 環境
 
 ```bash
-  npm i liquid-fill-gauge
+  npm i liquid-fill-gauge-wc
 ```
 
 瀏覽器
