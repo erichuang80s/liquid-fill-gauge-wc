@@ -14,7 +14,7 @@ Node 環境
 瀏覽器
 
 ```html
-  <script src="https://cdn.jsdelivr.net/npm/liquid-fill-gauge@latest/dist/liquidFillGauge.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/liquid-fill-gauge-wc@latest/dist/liquidFillGauge.min.js"></script>
 ```
 
 ## Examples
