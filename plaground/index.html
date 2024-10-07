@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>liguidFillGauge</title>
+  <style>
+    liquid-fill-gauge:not(:defined) {
+      opacity: 0;
+    }
+  </style>
 </head>
 <body>
   <liquid-fill-gauge id="lfg-1" width="200" height="200" min="0" max="100" value="54.6" amplitude="2" fps="120" unit="%">

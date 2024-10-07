@@ -61,7 +61,8 @@ Node 環境
 ```css
   /* Default */
   --liguid-fill-color: #38bdf8;
-  --liguid-fill-bg-color: white;
+  --liguid-fill-backward-color: white;
+  --liguid-fill-forward-color: white;
   --liguid-fill-text-size: 2rem;
   --liguid-fill-text-color: black;
   --liguid-fill-overlay-text-color: white;

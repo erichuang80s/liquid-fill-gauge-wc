@@ -16,7 +16,8 @@ export class LiquidFillGauge extends LitElement {
       font-size: 1rem;
       overflow-clip-margin: context-box;
       --liguid-fill-color: #38bdf8;
-      --liguid-fill-bg-color: white;
+      --liguid-fill-backward-color: white;
+      --liguid-fill-forward-color: white;
       --liguid-fill-text-size: 2rem;    
       --liguid-fill-text-color: black;    
       --liguid-fill-overlay-text-color: white;    
@@ -203,7 +204,8 @@ export class LiquidFillGauge extends LitElement {
     const content = !isSlot
       ? svg/* svg */`
       <g class="liguid-fill offsetCenter">    
-        <circle cx="0" cy="0" r="${halfWidth - 4}" fill="var(--liguid-fill-bg-color)" stroke="var(--liguid-fill-color)" stroke-width="4"></circle>
+        <circle cx="0" cy="0" r="${halfWidth - 4}" fill="var(--liguid-fill-backward-color)" stroke="var(--liguid-fill-color)" stroke-width="4"></circle>
+        <circle cx="0" cy="0" r="${halfWidth - _insideWidth}" fill="var(--liguid-fill-forward-color)"></circle>
         <circle cx="0" cy="0" r="${halfWidth - _insideWidth}" clip-path="url(#clipPathWave)"></circle>
       </g>
     `
