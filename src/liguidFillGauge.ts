@@ -20,7 +20,7 @@ export class LiquidFillGauge extends LitElement {
       --liguid-fill-text-size: 2rem;    
       --liguid-fill-text-color: black;    
       --liguid-fill-overlay-text-color: white;    
-      --liguid-fill-unit-text-size: .85rem;    
+      --liguid-fill-unit-text-size: 1rem;    
     }
 
     :host .liguid-fill {
@@ -61,6 +61,7 @@ export class LiquidFillGauge extends LitElement {
   @property({ type: Number, reflect: true }) min: number = 0
   @property({ type: Number, reflect: true }) max: number = 100
   @property({ type: String, reflect: true }) unit: string = ''
+  @property({ type: Number, reflect: true }) fps: number = 30
 
   private _value: number = 0
   @property({ type: Number, reflect: true })
@@ -110,6 +111,7 @@ export class LiquidFillGauge extends LitElement {
     this._setupValueTween()
 
     this._animate = animate({
+      fps: this.fps,
       callback: () => {
         if (this._tweenX) {
           const x = this._tweenX()
@@ -133,12 +135,17 @@ export class LiquidFillGauge extends LitElement {
           let v = this._tweenValue()
           if (!v)
             v = this._beforeValue
-          this._stateValue = Math.ceil(v)
+          this._stateValue = Number(v.toFixed(2))
         }
       },
     })
     this._animate.play()
     this._isFirstRender = true
+  }
+
+  disconnectedCallback() {
+    if (this._animate)
+      this._animate.stop()
   }
 
   private _setupScale() {

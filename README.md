@@ -47,6 +47,7 @@ Node 環境
 | min        | 最小值      | ✓       | number |
 | max        | 最大值      | ✓       | number |
 | unit       | 單位        | ✓       | string |
+| fps        | 動畫速度    | ✓       | number |
 
 ## Slots
 
