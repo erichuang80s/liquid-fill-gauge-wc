@@ -78,13 +78,14 @@ export class LiquidFillGauge extends LitElement {
     return this._value
   }
 
-  private _isFirstRender: boolean = false
-  private _translateX: number
-  private _translateY: number
-  private _beforeY: number = 0
-  private _stateValue: number = 0
-  private _beforeValue: number = 0
-  private _insideWidth: number = 10
+  @state() private _isFirstRender: boolean = false
+  @state() private _translateX: number
+  @state() private _translateY: number
+  @state() private _beforeY: number = 0
+  @state() private _stateValue: number = 0
+  @state() private _beforeValue: number = 0
+  @state() private _insideWidth: number = 10
+
   private _animate: AnimateRetrun | void
   private _tweenX: TweenReturn | void
   private _tweenY: TweenReturn | void
