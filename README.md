@@ -36,18 +36,18 @@ Node 環境
 
 ## Properties
 
-| Name       | Description | Reflects | Type   |
-| ---------- | ----------- | -------- | ------ |
-| width      | SVG 寬度    | ✓       | number |
-| height     | SVG 高度    | ✓       | number |
-| amplitude  | 振幅        | ✓       | number |
-| frequency  | 频率        | ✓       | number |
-| phaseShift | 相位偏移    | ✓       | number |
-| value      | 目前值      | ✓       | number |
-| min        | 最小值      | ✓       | number |
-| max        | 最大值      | ✓       | number |
-| unit       | 單位        | ✓       | string |
-| fps        | 動畫速度    | ✓       | number |
+| Name       | Description | Type   |
+| ---------- | ----------- | ------ |
+| width      | SVG 寬度    | number |
+| height     | SVG 高度    | number |
+| amplitude  | 振幅        | number |
+| frequency  | 频率        | number |
+| phaseShift | 相位偏移    | number |
+| value      | 目前值      | number |
+| min        | 最小值      | number |
+| max        | 最大值      | number |
+| unit       | 單位        | string |
+| fps        | 動畫速度    | number |
 
 ## Slots
 

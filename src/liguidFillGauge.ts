@@ -53,18 +53,18 @@ export class LiquidFillGauge extends LitElement {
 
   `
 
-  @property({ type: Number, reflect: true }) width?: number = 256
-  @property({ type: Number, reflect: true }) height?: number = 256
-  @property({ type: Number, reflect: true }) amplitude: number = 12
-  @property({ type: Number, reflect: true }) frequency: number = 0.02
-  @property({ type: Number, reflect: true }) phaseShift: number = 1
-  @property({ type: Number, reflect: true }) min: number = 0
-  @property({ type: Number, reflect: true }) max: number = 100
-  @property({ type: String, reflect: true }) unit: string = ''
-  @property({ type: Number, reflect: true }) fps: number = 30
+  @property({ type: Number }) width?: number = 256
+  @property({ type: Number }) height?: number = 256
+  @property({ type: Number }) amplitude: number = 12
+  @property({ type: Number }) frequency: number = 0.02
+  @property({ type: Number }) phaseShift: number = 1
+  @property({ type: Number }) min: number = 0
+  @property({ type: Number }) max: number = 100
+  @property({ type: String }) unit: string = ''
+  @property({ type: Number }) fps: number = 30
 
   private _value: number = 0
-  @property({ type: Number, reflect: true })
+  @property({ type: Number })
   set value(v) {
     this._value = Number(v)
     if (this._isFirstRender) {
@@ -78,14 +78,13 @@ export class LiquidFillGauge extends LitElement {
     return this._value
   }
 
-  @state() private _isFirstRender: boolean = false
-  @state() private _translateX: number
-  @state() private _translateY: number
-  @state() private _beforeY: number = 0
-  @state() private _stateValue: number = 0
-  @state() private _beforeValue: number = 0
-  @state() private _insideWidth: number = 10
-
+  private _isFirstRender: boolean = false
+  private _translateX: number
+  private _translateY: number
+  private _beforeY: number = 0
+  private _stateValue: number = 0
+  private _beforeValue: number = 0
+  private _insideWidth: number = 10
   private _animate: AnimateRetrun | void
   private _tweenX: TweenReturn | void
   private _tweenY: TweenReturn | void
