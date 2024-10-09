@@ -79,13 +79,13 @@ export class LiquidFillGauge extends LitElement {
     return this._value
   }
 
-  @state() private _isFirstRender: boolean = false
   @state() private _translateX: number
-  @state() private _translateY: number
-  @state() private _beforeY: number = 0
-  @state() private _stateValue: number = 0
-  @state() private _beforeValue: number = 0
-  @state() private _insideWidth: number = 10
+  private _translateY: number
+  private _isFirstRender: boolean = false
+  private _beforeY: number = 0
+  private _stateValue: number = 0
+  private _beforeValue: number = 0
+  private _insideWidth: number = 10
 
   private _animate: AnimateRetrun | void
   private _tweenX: TweenReturn | void
@@ -140,6 +140,7 @@ export class LiquidFillGauge extends LitElement {
         }
       },
     })
+
     this._animate.play()
     this._isFirstRender = true
   }
@@ -197,7 +198,6 @@ export class LiquidFillGauge extends LitElement {
     const { width, height, amplitude, phaseShift, frequency, _translateX, _translateY, _period, _insideWidth, unit } = this
     const halfWidth = width / 2
     const halfHeight = height / 2
-
     const d = generateSineWave({ width: width + _period, height, phaseShift, amplitude, frequency })
 
     const isSlot = this.childElementCount !== 0
