@@ -42,19 +42,11 @@ Node 環境
 | height     | SVG 高度    | number |
 | amplitude  | 振幅        | number |
 | frequency  | 频率        | number |
-| phaseShift | 相位偏移    | number |
 | value      | 目前值      | number |
 | min        | 最小值      | number |
 | max        | 最大值      | number |
 | unit       | 單位        | string |
 | fps        | 動畫速度    | number |
-
-## Slots
-
-| Name    | Description                       |
-| ------- | --------------------------------- |
-| outward | 自訂外框容器形狀                  |
-| inward  | 自訂液體形狀，會被 clip-path 遮罩 |
 
 ## CSS Variable
 
