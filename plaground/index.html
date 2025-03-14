@@ -11,18 +11,25 @@
   </style>
 </head>
 <body>
-  <liquid-fill-gauge id="lfg-1" width="200" height="200" min="0" max="100" value="54.6" amplitude="2" fps="120" unit="%">
-    <svg viewBox="0 0 200 200" width="200" height="200" slot="shape">
-      <rect x="10" y="10" width="180" height="180" rx="10" ry="10" stroke-width="10" stroke="#ccc" fill="none"></rect>
-    </svg>
-  </liquid-fill-gauge>
-  <liquid-fill-gauge width="100" height="100" value="50" amplitude="12"></liquid-fill-gauge>
-  <liquid-fill-gauge width="50" height="50" frequency="0.1" value="1" amplitude="10" style="--liguid-fill-text-color: red; --liguid-fill-text-size: 1rem;"></liquid-fill-gauge>
+  <liquid-fill-gauge id="lfg-1" width="200" height="200" min="0" max="100" value="54.6" amplitude="2" fps="120" unit="%"></liquid-fill-gauge>
+  <liquid-fill-gauge width="150" height="150" value="24" amplitude="2"></liquid-fill-gauge>
+  <liquid-fill-gauge width="100" height="100" value="85" amplitude="2"></liquid-fill-gauge>
+  <liquid-fill-gauge width="100" height="100" frequency="0.1" value="2" amplitude="12" style="--liguid-fill-text-color: red; --liguid-fill-text-size: 1rem;"></liquid-fill-gauge>
   <liquid-fill-gauge width="50" height="50" frequency="0.9" value="1" amplitude="6" style="--liguid-fill-color: red; --liguid-fill-text-color: red; --liguid-fill-text-size: 1rem;"></liquid-fill-gauge>
   <script type="module" src="/main.ts"></script>
   <script>
-    const lfg1 = document.getElementById('lfg-1')
-    lfg1.addEventListener('change', (e) => console.log(e))
+    const liqs = document.querySelectorAll('liquid-fill-gauge')
+    liqs.forEach(liq => {
+      liq.addEventListener('change', e => {
+        console.log(e.target.value)
+      })
+    })
+
+    setInterval(() => {
+    liqs.forEach(liq => {
+      liq.value = Math.random() * (100 - 0) + 0
+    })
+    }, 5000)
   </script>
 </body>
 <svg fill="currentColor">
