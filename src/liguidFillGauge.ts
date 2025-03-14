@@ -20,6 +20,7 @@ export class LiquidFillGauge extends LitElement {
   @property({ type: Number }) min: number = 0
   @property({ type: Number }) max: number = 100
   @property({ type: String }) unit: string = ''
+  @property({ type: Number }) stateValue: number = 0
 
   static styles = css`
     :host {
@@ -66,7 +67,6 @@ export class LiquidFillGauge extends LitElement {
   private _translateX: number
   private _translateY: number
   private _beforeY: number = 0
-  private _stateValue: number = 0
   private _beforeValue: number = 0
   private _insideWidth: number = 10
   private _animate: AnimateRetrun | void
@@ -158,13 +158,9 @@ export class LiquidFillGauge extends LitElement {
           let v = this._tweenValue()
           if (!v)
             v = this._beforeValue
-          this._stateValue = Number(v.toFixed(2))
+          this.stateValue = Number(v.toFixed(2))
         }
-
         this._wavePath.setAttribute('transform', `translate(${this._translateX} ${this._translateY})`)
-        for (const text of this._valueGroup.children) {
-          text.textContent = `${this._stateValue}${this.unit}`
-        }
       },
     })
 
@@ -279,10 +275,10 @@ export class LiquidFillGauge extends LitElement {
         ${content}
         <g class="liguid-fill-text" part="text-wrap" id="value-group">
           <text stroke="none" text-anchor="middle" fill="var(--liguid-fill-text-color)" dy="0">
-            ${this._stateValue}
+            ${this.stateValue} ${this.unit}
           </text>
           <text stroke="none" text-anchor="middle" fill="var(--liguid-fill-overlay-text-color)" dy="0" clip-path="url(#${_uid})">
-            ${this._stateValue}
+            ${this.stateValue} ${this.unit}
           </text>
         </g>
       </svg>
