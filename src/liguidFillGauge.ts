@@ -1,5 +1,5 @@
 import { LitElement, css, svg } from 'lit'
-import { customElement, property, query } from 'lit/decorators.js'
+import { customElement, property, query, state } from 'lit/decorators.js'
 import { generateSineWave } from './utils/sineWave'
 import clamp from './utils/clamp'
 import { type TweenReturn, tween } from './utils/tween'
@@ -20,17 +20,17 @@ export class LiquidFillGauge extends LitElement {
   @property({ type: Number }) min: number = 0
   @property({ type: Number }) max: number = 100
   @property({ type: String }) unit: string = ''
-  @property({ type: Number }) stateValue: number = 0
+  @state() private stateValue: number = 0
 
   static styles = css`
     :host {
-      --liguid-fill-color: #38bdf8;
-      --liguid-fill-backward-color: white;
-      --liguid-fill-forward-color: white;
-      --liguid-fill-text-size: 1.5rem;    
-      --liguid-fill-text-color: black;    
-      --liguid-fill-overlay-text-color: white;    
-      --liguid-fill-unit-text-size: 1rem;   
+      --liquid-fill-color: #38bdf8;
+      --liquid-fill-backward-color: white;
+      --liquid-fill-forward-color: white;
+      --liquid-fill-text-size: 1.5rem;    
+      --liquid-fill-text-color: black;    
+      --liquid-fill-overlay-text-color: white;    
+      --liquid-fill-unit-text-size: 1rem;   
 
       display: inline-flex;
       color: #38bdf8;
@@ -39,13 +39,13 @@ export class LiquidFillGauge extends LitElement {
       overflow-clip-margin: context-box;
     }
 
-    :host .liguid-fill {
-      fill: var(--liguid-fill-color);
+    :host .liquid-fill {
+      fill: var(--liquid-fill-color);
     }
     
 
-    :host .liguid-fill-text {
-      font-size: var(--liguid-fill-text-size);
+    :host .liquid-fill-text {
+      font-size: var(--liquid-fill-text-size);
       font-family: sans-serif;
       font-weight: bold;
       transform: translate(50%, 50%);
@@ -119,7 +119,11 @@ export class LiquidFillGauge extends LitElement {
   private _value: number = 0
   @property({ type: Number })
   set value(v) {
-    this._value = Number(v)
+    const next = Number(v)
+    if (next === this._value)
+      return
+
+    this._value = next
     this._setupYTween()
     this._setupValueTween()
     this.dispatchEvent(new Event('change', { composed: true }))
@@ -138,28 +142,31 @@ export class LiquidFillGauge extends LitElement {
       fps: this.fps,
       callback: () => {
         if (this._tweenX) {
-          const x = this._tweenX()
+          let x = this._tweenX()
 
-          if (!x)
+          if (x === undefined) {
+            x = 0
             this._setupXTween()
+          }
 
           this._translateX = x
         }
 
         if (this._tweenY) {
           let y = this._tweenY()
-
-          if (!y)
+          if (y === undefined)
             y = this._beforeY
+
           this._translateY = y
         }
 
         if (this._tweenValue) {
           let v = this._tweenValue()
-          if (!v)
+          if (v === undefined)
             v = this._beforeValue
           this.stateValue = Number(v.toFixed(2))
         }
+
         this._wavePath.setAttribute('transform', `translate(${this._translateX} ${this._translateY})`)
       },
     })
@@ -210,9 +217,7 @@ export class LiquidFillGauge extends LitElement {
     this._beforeValue = clampValue
   }
 
-  resize(w: number, h: number) {
-    this.width = w || this.width
-    this.height = h || this.height
+  private _init() {
     this._updateWavePath()
     this._setupScale()
     this._setupXTween()
@@ -221,19 +226,18 @@ export class LiquidFillGauge extends LitElement {
     this._setupAnimate()
   }
 
+  resize(w: number, h: number) {
+    this.width = w || this.width
+    this.height = h || this.height
+    this._init()
+  }
+
   connectedCallback(): void {
     super.connectedCallback()
-
-    this._setupScale()
     this._beforeY = this.fullValue
     this._translateY = this.fullValue
     this._translateX = 0
-
-    this._setupXTween()
-    this._setupYTween()
-    this._setupValueTween()
-
-    this._setupAnimate()
+    this._init()
   }
 
   firstUpdated() {
@@ -253,9 +257,9 @@ export class LiquidFillGauge extends LitElement {
     const wavePath = svg/* svg */`<path id="wave-path" transform="translate(${_translateX} ${_translateY})"></path>`
 
     const content = svg/* svg */`
-      <g class="liguid-fill" style="transform: translate(50%, 50%);">    
-        <circle cx="0" cy="0" r="${halfWidth - 4}" fill="var(--liguid-fill-backward-color)" stroke="var(--liguid-fill-color)" stroke-width="4"></circle>
-        <circle cx="0" cy="0" r="${halfWidth - _insideWidth}" fill="var(--liguid-fill-forward-color)"></circle>
+      <g class="liquid-fill" style="transform: translate(50%, 50%);">    
+        <circle cx="0" cy="0" r="${halfWidth - 4}" fill="var(--liquid-fill-backward-color)" stroke="var(--liquid-fill-color)" stroke-width="4"></circle>
+        <circle cx="0" cy="0" r="${halfWidth - _insideWidth}" fill="var(--liquid-fill-forward-color)"></circle>
         <circle cx="0" cy="0" r="${halfWidth - _insideWidth}" clip-path="url(#${_uid})"></circle>
       </g>
     `
@@ -273,11 +277,11 @@ export class LiquidFillGauge extends LitElement {
           </clipPath>
         </defs>
         ${content}
-        <g class="liguid-fill-text" part="text-wrap" id="value-group">
-          <text stroke="none" text-anchor="middle" fill="var(--liguid-fill-text-color)" dy="0">
+        <g class="liquid-fill-text" part="text-wrap" id="value-group">
+          <text stroke="none" text-anchor="middle" fill="var(--liquid-fill-text-color)" dy="0">
             ${this.stateValue} ${this.unit}
           </text>
-          <text stroke="none" text-anchor="middle" fill="var(--liguid-fill-overlay-text-color)" dy="0" clip-path="url(#${_uid})">
+          <text stroke="none" text-anchor="middle" fill="var(--liquid-fill-overlay-text-color)" dy="0" clip-path="url(#${_uid})">
             ${this.stateValue} ${this.unit}
           </text>
         </g>

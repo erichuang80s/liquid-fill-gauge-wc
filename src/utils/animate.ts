@@ -11,33 +11,32 @@ interface AnimateOption {
 
 export function animate({ fps = 30, callback }: AnimateOption): AnimateRetrun {
   let req = 0
-  let now: number
-  let then: number = Date.now()
+  let then: number = performance.now()
   let interval = 1000 / fps
   let delta: number
   let t = 0
 
-  function step(): void {
+  function step(timestamp: DOMHighResTimeStamp): void {
     req = requestAnimationFrame(step)
-    now = Date.now()
-    delta = now - then
+    delta = timestamp - then
 
     if (delta > interval) {
-      then = now - (delta % interval)
-      t++
-      callback(t)
+      then = timestamp - (delta % interval)
+      callback(++t)
     }
   }
 
   function play(): void {
-    step()
+    if (req)
+      cancelAnimationFrame(req)
+    then = performance.now()
+    step(then)
   }
 
   function stop(): void {
     cancelAnimationFrame(req)
-    now = 0
     delta = 0
-    then = Date.now()
+    then = performance.now()
     req = 0
   }
 
